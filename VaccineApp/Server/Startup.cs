@@ -32,6 +32,7 @@ namespace VaccineApp.Server
             });
 
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IVaccinationService, VaccinationService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
