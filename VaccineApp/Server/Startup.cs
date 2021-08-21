@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
 using VaccineApp.Server.Data;
+using VaccineApp.Server.Services;
+using VaccineApp.Server.Services.Interfaces;
 
 namespace VaccineApp.Server
 {
@@ -28,6 +30,8 @@ namespace VaccineApp.Server
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SQLServer"));
             });
+
+            services.AddScoped<IOrderService, OrderService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
