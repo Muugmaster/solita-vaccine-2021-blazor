@@ -19,12 +19,12 @@ namespace VaccineApp.Server.Services
         }
         public async Task<Order> GetOrder(string id)
         {
-            return await _context.Orders.FirstOrDefaultAsync(o => o.Id == id);
+            return await _context.Orders.Include(v => v.Vaccinations).FirstOrDefaultAsync(o => o.Id == id);
         }
 
         public async Task<List<Order>> GetOrders()
         {
-            return await _context.Orders.ToListAsync();
+            return await _context.Orders.Include(v => v.Vaccinations).ToListAsync();
         }
     }
 }
