@@ -14,7 +14,7 @@ namespace VaccineApp.Shared.SeedDatabase
         public List<Vaccination> SeedVaccinationData()
         {
             var vaccinations = new List<Vaccination>();
-            using (StreamReader r = new StreamReader(@"data\vaccinations.json"))
+            using (StreamReader r = new StreamReader(@"Data\Initial\vaccinations.json"))
             {
                 string json = r.ReadToEnd();
                 vaccinations = JsonConvert.DeserializeObject<List<Vaccination>>(json);
@@ -24,7 +24,7 @@ namespace VaccineApp.Shared.SeedDatabase
 
         public List<Order> SeedOrderData()
         {
-            string[] orderFiles = new string[] { "data\\zerpfy.json", "data\\solarBuddhica.json", "data\\antiqua.json" };
+            string[] orderFiles = new string[] { "Data\\Initial\\zerpfy.json", "Data\\Initial\\solarBuddhica.json", "Data\\Initial\\antiqua.json" };
             var orders = new List<Order>();
             var temp = new List<Order>();
             foreach (var file in orderFiles)
