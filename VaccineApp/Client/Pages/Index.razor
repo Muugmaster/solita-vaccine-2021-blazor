@@ -2,23 +2,63 @@
 @inject IOrderService OrderService
 
 <h4 class="mb-lg-4">Select date and start exploring data about orders, vaccines and vaccinations.</h4>
+<input type="datetime-local" @bind="Date" />
 
 <div class="row">
-    <div class="col-sm">
+    <div class="col-sm-12 col-lg-6">
         <ArrivedCard OrdersBeforeDate="ordersBeforeDate" OrdersOnDate="ordersOnDate"></ArrivedCard>
     </div>
-    <div class="col-sm">
-        <ArrivedCard OrdersBeforeDate="ordersBeforeDate" OrdersOnDate="ordersOnDate"></ArrivedCard>
+    <div class="col-sm-12 col-lg-6">
+        <ExpiredCard ExpiredOrders="expiredOrders"></ExpiredCard>
     </div>
 </div>
 
 @code {
     public List<Order> ordersBeforeDate { get; set; } = new List<Order>();
     public List<Order> ordersOnDate { get; set; } = new List<Order>();
+    public List<Order> expiredOrders { get; set; } = new List<Order>();
+    private DateTime date = new DateTime(2021, 4, 12, 11, 10, 06);
+    public DateTime Date
+    {
+        get { return date; }
+        set
+        {
+            date = value;
+            HandleChange();
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        ordersBeforeDate = await OrderService.GetOrdersBeforeDate("2021-03-20");
-        ordersOnDate = await OrderService.GetOrdersOnDate("2021-03-20");
+        Console.WriteLine(date);
+        await GetAllData();
     }
+
+    private async Task GetAllData()
+    {
+        try
+        {
+            ordersBeforeDate = await OrderService.GetOrdersBeforeDate(date.ToString("s"));
+            ordersOnDate = await OrderService.GetOrdersOnDate(date.ToString("s"));
+            expiredOrders = await OrderService.GetOrdersBeforeDate(Substrack30DaysToString(date));
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("ERROR");
+        }
+    }
+
+    private string Substrack30DaysToString(DateTime date)
+    {
+        return date.AddDays(-30).ToString("s");
+    }
+
+    private async void HandleChange()
+    {
+
+        await GetAllData();
+        StateHasChanged();
+    }
+
+
 }

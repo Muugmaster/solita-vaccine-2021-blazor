@@ -1,0 +1,29 @@
+﻿@if (ExpiredOrders.Count == 0)
+{
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+}
+else
+{
+    <h3>ExpiredCard</h3>
+    <p>@ExpiredVaccines(ExpiredOrders)</p>
+}
+
+@code {
+    [Parameter]
+    public List<Order> ExpiredOrders { get; set; }
+
+    int ExpiredVaccines(List<Order> orders)
+    {
+        int expiredVaccines = 0;
+        int totalVaccines = 0;
+        foreach (var order in orders)
+        {
+            expiredVaccines += order.Vaccinations.Count;
+            totalVaccines += order.Injections;
+        }
+
+        return totalVaccines - expiredVaccines;
+    }
+}
