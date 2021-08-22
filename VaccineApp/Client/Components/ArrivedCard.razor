@@ -1,4 +1,10 @@
-﻿<div class="card" style="width: 40rem;">
+﻿@if (OrdersBeforeDate.Count == 0)
+{
+  <span>Loading orders...</span>
+}
+else
+{
+<div class="card" style="width: 40rem;">
     <div class="card-body">
         <h5 class="card-title">Orders and vaccines arrived</h5>
         <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
@@ -8,11 +14,11 @@
                 <ul class="list-group text-left">
                     <li class="list-group-item">
                         <div class="font-weight-bold">Total vaccines</div>
-                        1000
+                        @CountVaccinesFromOrders(OrdersBeforeDate)
                     </li>
                     <li class="list-group-item">
                         <div class="font-weight-bold">Total orders</div>
-                        2312
+                        @OrdersBeforeDate.Count
                     </li>
                 </ul>
             </div>
@@ -21,18 +27,32 @@
                 <ul class="list-group text-left">
                     <li class="list-group-item">
                         <div class="font-weight-bold">Total vaccines</div>
-                        1000
+                        @CountVaccinesFromOrders(OrdersOnDate)
                     </li>
                     <li class="list-group-item">
                         <div class="font-weight-bold">Total orders</div>
-                        2312
+                        @OrdersOnDate.Count
                     </li>
                 </ul>
             </div>
-            </div>
         </div>
+    </div>
 </div>
+}
 
 @code {
+    [Parameter]
+    public List<Order> OrdersBeforeDate { get; set; }
+    [Parameter]
+    public List<Order> OrdersOnDate { get; set; }
 
+    int CountVaccinesFromOrders(List<Order> orders)
+    {
+        int vaccines = 0;
+        foreach (var order in orders)
+        {
+            vaccines += order.Injections;
+        }
+        return vaccines;
+    }
 }

@@ -1,7 +1,26 @@
 ﻿@page "/"
+@inject IOrderService OrderService
 
 <h1 class="mb-lg-4">Vaccine App</h1>
 
-<h4>Select date and start exploring data about orders, vaccines and vaccinations.</h4>
+<h4 class="mb-lg-4">Select date and start exploring data about orders, vaccines and vaccinations.</h4>
 
-<ArrivedCard></ArrivedCard>
+<div class="row">
+    <div class="col-sm">
+        <ArrivedCard OrdersBeforeDate="ordersBeforeDate" OrdersOnDate="ordersOnDate"></ArrivedCard>
+    </div>
+    <div class="col-sm">
+        <ArrivedCard OrdersBeforeDate="ordersBeforeDate" OrdersOnDate="ordersOnDate"></ArrivedCard>
+    </div>
+</div>
+
+@code {
+    public List<Order> ordersBeforeDate { get; set; } = new List<Order>();
+    public List<Order> ordersOnDate { get; set; } = new List<Order>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ordersBeforeDate = await OrderService.GetOrdersBeforeDate("2021-03-20");
+        ordersOnDate = await OrderService.GetOrdersOnDate("2021-03-20");
+    }
+}

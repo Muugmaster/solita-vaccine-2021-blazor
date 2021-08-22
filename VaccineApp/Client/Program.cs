@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using VaccineApp.Client.Services;
+using VaccineApp.Client.Services.Interfaces;
 
 namespace VaccineApp.Client
 {
@@ -18,6 +20,9 @@ namespace VaccineApp.Client
             builder.RootComponents.Add<App>("#app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+            // Register services
+            builder.Services.AddScoped<IOrderService, OrderService>();
 
             await builder.Build().RunAsync();
         }
