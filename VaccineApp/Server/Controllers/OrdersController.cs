@@ -57,5 +57,22 @@ namespace VaccineApp.Server.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
             }
         }
+
+        [HttpGet("before")]
+        public async Task<ActionResult<List<OrderDto>>> GetOrdersBeforeDate(DateTime date)
+        {
+            try
+            {
+                var orders = await _orderService.GetOrdersBeforeDate(date);
+                if (!orders.Any()) return NotFound("Could not find any orders before given date.");
+
+                var mappedOrders = _mapper.Map<List<OrderDto>>(orders);
+                return Ok(mappedOrders);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
+            }
+        }
     }
 }
