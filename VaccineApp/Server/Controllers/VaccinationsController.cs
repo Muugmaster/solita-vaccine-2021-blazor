@@ -21,20 +21,34 @@ namespace VaccineApp.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetVaccinations()
         {
-            var vaccinations = await _vaccinationService.GetVaccinations();
-            return Ok(vaccinations);
+            try
+            {
+                var vaccinations = await _vaccinationService.GetVaccinations();
+                return Ok(vaccinations);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetVaccination(string id)
         {
-            var vaccination = await _vaccinationService.GetVaccination(id);
-            if (vaccination == null)
+            try
             {
-                return NotFound("Could not find vaccination with given ID");
-            }
+                var vaccination = await _vaccinationService.GetVaccination(id);
+                if (vaccination == null)
+                {
+                    return NotFound("Could not find vaccination with given ID");
+                }
 
-            return Ok(vaccination);
+                return Ok(vaccination);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
+            }
         }
     }
 }

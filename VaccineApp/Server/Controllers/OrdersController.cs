@@ -21,20 +21,35 @@ namespace VaccineApp.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetOrders()
         {
-            var orders = await _orderService.GetOrders();
-            return Ok(orders);
+            try
+            {
+                var orders = await _orderService.GetOrders();
+                return Ok(orders);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
+            }
+            
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrder(string id)
         {
-            var order = await _orderService.GetOrder(id);
-            if (order == null)
+            try
             {
-                return NotFound("Could not find order with given ID");
-            }
+                var order = await _orderService.GetOrder(id);
+                if (order == null)
+                {
+                    return NotFound("Could not find order with given ID");
+                }
 
-            return Ok(order);
+                return Ok(order);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
+            }
         }
     }
 }
