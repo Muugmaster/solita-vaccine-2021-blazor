@@ -58,7 +58,24 @@ namespace VaccineApp.Server.Controllers
             }
         }
 
-        [HttpGet("before")]
+        [HttpGet("arrived")]
+        public async Task<ActionResult<List<OrderDto>>> GetOrderOnDate(DateTime date)
+        {
+            try
+            {
+                var orders = await _orderService.GetOrdersOnDate(date);
+                if (!orders.Any()) return NotFound("Could not find any orders on given date.");
+
+                var mappedOrders = _mapper.Map<List<OrderDto>>(orders);
+                return Ok(mappedOrders);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
+            }
+        }
+
+        [HttpGet("arrived/before")]
         public async Task<ActionResult<List<OrderDto>>> GetOrdersBeforeDate(DateTime date)
         {
             try

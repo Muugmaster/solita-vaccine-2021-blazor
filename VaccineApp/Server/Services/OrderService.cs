@@ -31,5 +31,10 @@ namespace VaccineApp.Server.Services
         {
             return await _context.Orders.Include(v => v.Vaccinations).Where(o => o.Arrived <= date).ToListAsync();
         }
+
+        public async Task<List<Order>> GetOrdersOnDate(DateTime date)
+        {
+            return await _context.Orders.Include(v => v.Vaccinations).Where(o => o.Arrived.Date == date.Date).ToListAsync();
+        }
     }
 }
