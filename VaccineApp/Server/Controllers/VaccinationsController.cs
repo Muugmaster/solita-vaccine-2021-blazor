@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VaccineApp.Server.Dtos;
 using VaccineApp.Server.Services.Interfaces;
 
 namespace VaccineApp.Server.Controllers
@@ -13,18 +15,21 @@ namespace VaccineApp.Server.Controllers
     public class VaccinationsController : ControllerBase
     {
         private readonly IVaccinationService _vaccinationService;
-        public VaccinationsController(IVaccinationService vaccinationService)
+        private readonly IMapper _mapper;
+        public VaccinationsController(IVaccinationService vaccinationService, IMapper mapper)
         {
             _vaccinationService = vaccinationService;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetVaccinations()
+        public async Task<ActionResult<List<VaccinationDto>>> GetVaccinations()
         {
             try
             {
                 var vaccinations = await _vaccinationService.GetVaccinations();
-                return Ok(vaccinations);
+                var mappedVaccinations = _mapper.Map<List<VaccinationDto>>(vaccinations);
+                return Ok(mappedVaccinations);
             }
             catch (Exception)
             {
@@ -33,17 +38,18 @@ namespace VaccineApp.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetVaccination(string id)
+        public async Task<ActionResult<VaccinationDto>> GetVaccination(string id)
         {
             try
             {
                 var vaccination = await _vaccinationService.GetVaccination(id);
+                var mappedVaccination = _mapper.Map<VaccinationDto>(vaccination);
                 if (vaccination == null)
                 {
                     return NotFound("Could not find vaccination with given ID");
                 }
 
-                return Ok(vaccination);
+                return Ok(mappedVaccination);
             }
             catch (Exception)
             {

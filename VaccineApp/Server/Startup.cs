@@ -10,6 +10,8 @@ using System.Linq;
 using VaccineApp.Server.Data;
 using VaccineApp.Server.Services;
 using VaccineApp.Server.Services.Interfaces;
+using AutoMapper;
+using System;
 
 namespace VaccineApp.Server
 {
@@ -33,6 +35,8 @@ namespace VaccineApp.Server
 
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IVaccinationService, VaccinationService>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddControllersWithViews();
             services.AddRazorPages();

@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VaccineApp.Server.Dtos;
 using VaccineApp.Server.Services.Interfaces;
 
 namespace VaccineApp.Server.Controllers
@@ -13,18 +15,21 @@ namespace VaccineApp.Server.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrderService _orderService;
-        public OrdersController(IOrderService orderService)
+        private readonly IMapper _mapper;
+        public OrdersController(IOrderService orderService, IMapper mapper)
         {
             _orderService = orderService;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetOrders()
+        public async Task<ActionResult<List<OrderDto>>> GetOrders()
         {
             try
             {
                 var orders = await _orderService.GetOrders();
-                return Ok(orders);
+                var mappedOrders = _mapper.Map<List<OrderDto>>(orders);
+                return Ok(mappedOrders);
             }
             catch (Exception)
             {
@@ -34,17 +39,18 @@ namespace VaccineApp.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetOrder(string id)
+        public async Task<ActionResult<OrderDto>> GetOrder(string id)
         {
             try
             {
                 var order = await _orderService.GetOrder(id);
+                var mappedOrder = _mapper.Map<OrderDto>(order);
                 if (order == null)
                 {
                     return NotFound("Could not find order with given ID");
                 }
 
-                return Ok(order);
+                return Ok(mappedOrder);
             }
             catch (Exception)
             {
