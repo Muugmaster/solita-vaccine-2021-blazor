@@ -2,15 +2,15 @@
 @inject IOrderService OrderService
 
 <h4 class="mb-lg-4">Select date and start exploring data about orders, vaccines and vaccinations.</h4>
-<input class="p-1 m-1" type="datetime-local" disabled="@isLoading" @bind="Date" />
-@if (isLoading == true)
+<input class="p-1 m-1" type="datetime-local" disabled="@isLoading" @bind="Date" min="1990-01-01T00:00" max="2050-01-01T00:00" />
+@if (isLoading == true && ordersBeforeDate.Count != 0)
 {
 <div class="spinner-border ml-3" role="status">
     <span class="sr-only">Loading...</span>
 </div>
 }
 
-<div class="row">
+<div class="row mt-4">
     <div class="col-sm-12 col-lg-6">
         <ArrivedCard OrdersBeforeDate="ordersBeforeDate" OrdersOnDate="ordersOnDate"></ArrivedCard>
     </div>

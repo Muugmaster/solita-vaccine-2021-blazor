@@ -1,4 +1,6 @@
-﻿@if (OrdersBeforeDate.Count == 0)
+﻿@inject IOrderService orderService
+
+@if (OrdersBeforeDate.Count == 0)
 {
 <div class="spinner-border" role="status">
     <span class="sr-only">Loading...</span>
@@ -16,7 +18,7 @@ else
                 <ul class="list-group text-left">
                     <li class="list-group-item">
                         <div class="font-weight-bold">Total vaccines</div>
-                        @CountVaccinesFromOrders(OrdersBeforeDate)
+                        @orderService.CountVaccinesFromOrders(OrdersBeforeDate)
                     </li>
                     <li class="list-group-item">
                         <div class="font-weight-bold">Total orders</div>
@@ -29,7 +31,7 @@ else
                 <ul class="list-group text-left">
                     <li class="list-group-item">
                         <div class="font-weight-bold">Total vaccines</div>
-                        @CountVaccinesFromOrders(OrdersOnDate)
+                        @orderService.CountVaccinesFromOrders(OrdersOnDate)
                     </li>
                     <li class="list-group-item">
                         <div class="font-weight-bold">Total orders</div>
@@ -47,14 +49,4 @@ else
     public List<Order> OrdersBeforeDate { get; set; }
     [Parameter]
     public List<Order> OrdersOnDate { get; set; }
-
-    int CountVaccinesFromOrders(List<Order> orders)
-    {
-        int vaccines = 0;
-        foreach (var order in orders)
-        {
-            vaccines += order.Injections;
-        }
-        return vaccines;
-    }
 }

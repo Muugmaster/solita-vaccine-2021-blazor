@@ -30,5 +30,15 @@ namespace VaccineApp.Client.Services
         {
             return await _httpClient.GetFromJsonAsync<List<Order>>($"api/orders/arrived?date={date}");
         }
+
+        public int CountVaccinesFromOrders(List<Order> orders)
+        {
+            int vaccines = 0;
+            foreach (var order in orders)
+            {
+                vaccines += order.Injections;
+            }
+            return vaccines;
+        }
     }
 }
