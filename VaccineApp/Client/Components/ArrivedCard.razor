@@ -12,12 +12,12 @@ else
     <div class="card-body">
         <h5 class="card-title">Orders and vaccines arrived</h5>
         <h6 class="card-subtitle mb-2 text-muted">
-            @*<select @bind="VaccineName">
+            <select @bind="VaccineName">
                 @foreach (var value in Enum.GetValues(typeof(VaccineNames)))
                     {
                     <option>@value</option>
                     }
-            </select>*@
+            </select>
         </h6>
         <div class="row">
             <div class="col-sm">
@@ -56,4 +56,41 @@ else
     public List<Order> OrdersBeforeDate { get; set; }
     [Parameter]
     public List<Order> OrdersOnDate { get; set; }
+    [Parameter]
+    public DateTime date { get; set; }
+
+    private string vaccineName = VaccineNames.Total.ToString();
+    public string VaccineName { get
+        {
+            return vaccineName;
+        } set
+        {
+            vaccineName = value.ToString();
+            HandleChange();
+
+        }
+    }
+
+    enum VaccineNames
+    {
+        Total,
+        Zerpfy,
+        SolarBuddhica,
+        Antiqua
+    }
+
+    private async void HandleChange()
+    {
+        if (vaccineName != VaccineNames.Total.ToString())
+        {
+            OrdersBeforeDate = await orderService.GetOrdersBeforeDateWithVaccineName(date.ToString("s"), vaccineName);
+            OrdersOnDate = await orderService.GetOrdersOnDateWithVaccineName(date.ToString("s"), vaccineName);
+            StateHasChanged();
+        } else
+        {
+            OrdersBeforeDate = await orderService.GetOrdersBeforeDate(date.ToString("s"));
+            OrdersOnDate = await orderService.GetOrdersOnDate(date.ToString("s"));
+            StateHasChanged();
+        }
+    }
 }
