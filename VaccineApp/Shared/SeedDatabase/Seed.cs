@@ -14,7 +14,7 @@ namespace VaccineApp.Shared.SeedDatabase
         public List<Vaccination> SeedVaccinationData()
         {
             var vaccinations = new List<Vaccination>();
-            using (StreamReader r = new StreamReader(@"Data\Initial\vaccinations.json", Encoding.UTF8))
+            using (StreamReader r = new StreamReader(@"Data\Initial\vaccinations.json", Encoding.GetEncoding("iso-8859-1")))
             {
                 string json = r.ReadToEnd();
                 vaccinations = JsonConvert.DeserializeObject<List<Vaccination>>(json);
@@ -29,7 +29,7 @@ namespace VaccineApp.Shared.SeedDatabase
             var temp = new List<Order>();
             foreach (var file in orderFiles)
             {
-                using (StreamReader r = new StreamReader(file, Encoding.UTF8))
+                using (StreamReader r = new StreamReader(file, Encoding.GetEncoding("iso-8859-1")))
                 {
                     string json = r.ReadToEnd();
                     temp = JsonConvert.DeserializeObject<List<Order>>(json);
