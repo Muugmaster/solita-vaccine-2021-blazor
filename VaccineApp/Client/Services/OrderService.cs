@@ -31,6 +31,16 @@ namespace VaccineApp.Client.Services
             return await _httpClient.GetFromJsonAsync<List<Order>>($"api/orders/arrived?date={date}");
         }
 
+        public async Task<List<Order>> GetOrdersBeforeDateWithVaccineName(string date, string vaccineName)
+        {
+            return await _httpClient.GetFromJsonAsync<List<Order>>($"api/orders/arrived/before?date={date}&vaccineName={vaccineName}");
+        }
+
+        public async Task<List<Order>> GetOrdersOnDateWithVaccineName(string date, string vaccineName)
+        {
+            return await _httpClient.GetFromJsonAsync<List<Order>>($"api/orders/arrived?date={date}&vaccineName={vaccineName}");
+        }
+
         public int CountVaccinesFromOrders(List<Order> orders)
         {
             int vaccines = 0;
