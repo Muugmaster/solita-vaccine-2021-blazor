@@ -6,13 +6,47 @@
 }
 else
 {
-    <h3>ExpiredCard</h3>
-    <p>@ExpiredVaccines(ExpiredOrders)</p>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Total orders and vaccines expired</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+        <div class="row">
+            <div class="col-sm">
+                <ul class="list-group text-left">
+                    <li class="list-group-item">
+                        <div class="font-weight-bold">
+                            Expired vaccines
+                        </div>
+                        @ExpiredVaccines(ExpiredOrders)
+                    </li>
+                    <li class="list-group-item">
+                        <div class="font-weight-bold">Vaccines expiring in next 10 days</div>
+                        @VaccinesGoingToExpireIn10Days(ExpiredOrders, OrdersGoingToExpireIn10Days)
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm">
+                <ul class="list-group text-left">
+                    <li class="list-group-item">
+                        <div class="font-weight-bold">Expired vaccines</div>
+                        @ExpiredVaccines(ExpiredOrders)
+                    </li>
+                    <li class="list-group-item">
+                        <div class="font-weight-bold">Expired vaccines</div>
+                        @ExpiredVaccines(ExpiredOrders)
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 }
 
 @code {
     [Parameter]
     public List<Order> ExpiredOrders { get; set; }
+    [Parameter]
+    public List<Order> OrdersGoingToExpireIn10Days { get; set; }
 
     int ExpiredVaccines(List<Order> orders)
     {
@@ -25,5 +59,13 @@ else
         }
 
         return totalVaccines - expiredVaccines;
+    }
+
+    int VaccinesGoingToExpireIn10Days(List<Order> expiredOrders, List<Order> ordersGoingToExpire)
+    {
+        int expired = ExpiredVaccines(expiredOrders);
+        int goingToExpire = ExpiredVaccines(ordersGoingToExpire);
+
+        return goingToExpire - expired;
     }
 }

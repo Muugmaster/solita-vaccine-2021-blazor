@@ -15,7 +15,7 @@
         <ArrivedCard OrdersBeforeDate="ordersBeforeDate" OrdersOnDate="ordersOnDate"></ArrivedCard>
     </div>
     <div class="col-sm-12 col-lg-6">
-        <ExpiredCard ExpiredOrders="expiredOrders"></ExpiredCard>
+        <ExpiredCard ExpiredOrders="expiredOrders" OrdersGoingToExpireIn10Days="ordersGoingToExpireIn10Days"></ExpiredCard>
     </div>
 </div>
 
@@ -23,6 +23,7 @@
     public List<Order> ordersBeforeDate { get; set; } = new List<Order>();
     public List<Order> ordersOnDate { get; set; } = new List<Order>();
     public List<Order> expiredOrders { get; set; } = new List<Order>();
+    public List<Order> ordersGoingToExpireIn10Days { get; set; } = new List<Order>();
     private DateTime date = new DateTime(2021, 4, 12, 11, 10, 06);
     public DateTime Date
     {
@@ -49,6 +50,7 @@
             ordersBeforeDate = await OrderService.GetOrdersBeforeDate(date.ToString("s"));
             ordersOnDate = await OrderService.GetOrdersOnDate(date.ToString("s"));
             expiredOrders = await OrderService.GetOrdersBeforeDate(Substrack30DaysToString(date));
+            ordersGoingToExpireIn10Days = await OrderService.GetOrdersBeforeDate(Substrack30DaysToString(date.AddDays(10)));
             isLoading = false;
         }
         catch (Exception)
