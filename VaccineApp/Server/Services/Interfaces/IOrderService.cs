@@ -13,5 +13,7 @@ namespace VaccineApp.Server.Services.Interfaces
         Task<Order> GetOrder(string id);
         Task<List<Order>> GetOrdersOnDate(DateTime date);
         Task<List<Order>> GetOrdersBeforeDate(DateTime date);
+        Task<List<Order>> GetOrdersBeforeDateWithVaccineName(DateTime date, string vaccineName);
+        Task<List<Order>> GetOrdersOnDateWithVaccineName(DateTime date, string vaccineName);
     }
 }

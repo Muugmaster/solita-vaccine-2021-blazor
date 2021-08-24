@@ -36,5 +36,15 @@ namespace VaccineApp.Server.Services
         {
             return await _context.Orders.Include(v => v.Vaccinations).Where(o => o.Arrived.Date == date.Date).OrderByDescending(o => o.OrderNumber).ToListAsync();
         }
+
+        public async Task<List<Order>> GetOrdersBeforeDateWithVaccineName(DateTime date, string vaccineName)
+        {
+            return await _context.Orders.Include(v => v.Vaccinations).Where(o => o.Arrived <= date).Where(o => o.Vaccine == vaccineName).OrderByDescending(o => o.OrderNumber).ToListAsync();
+        }
+
+        public async Task<List<Order>> GetOrdersOnDateWithVaccineName(DateTime date, string vaccineName)
+        {
+            return await _context.Orders.Include(v => v.Vaccinations).Where(o => o.Arrived.Date == date.Date).Where(o => o.Vaccine == vaccineName).OrderByDescending(o => o.OrderNumber).ToListAsync();
+        }
     }
 }

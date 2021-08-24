@@ -59,10 +59,17 @@ namespace VaccineApp.Server.Controllers
         }
 
         [HttpGet("arrived")]
-        public async Task<ActionResult<List<OrderDto>>> GetOrderOnDate(DateTime date)
+        public async Task<ActionResult<List<OrderDto>>> GetOrderOnDate(DateTime date, string vaccineName = null)
         {
             try
             {
+                if (vaccineName != null)
+                {
+                    var ordersWithName = await _orderService.GetOrdersOnDateWithVaccineName(date, vaccineName);
+                    if (!ordersWithName.Any()) return NotFound("Could not find any orders on given date and vaccine name.");
+                    var mappedOrdersWithName = _mapper.Map<List<OrderDto>>(ordersWithName);
+                    return Ok(mappedOrdersWithName);
+                }
                 var orders = await _orderService.GetOrdersOnDate(date);
                 if (!orders.Any()) return NotFound("Could not find any orders on given date.");
 
@@ -76,10 +83,17 @@ namespace VaccineApp.Server.Controllers
         }
 
         [HttpGet("arrived/before")]
-        public async Task<ActionResult<List<OrderDto>>> GetOrdersBeforeDate(DateTime date)
+        public async Task<ActionResult<List<OrderDto>>> GetOrdersBeforeDate(DateTime date, string vaccineName = null)
         {
             try
             {
+                if (vaccineName != null)
+                {
+                    var ordersWithName = await _orderService.GetOrdersBeforeDateWithVaccineName(date, vaccineName);
+                    if (!ordersWithName.Any()) return NotFound("Could not find any orders on before given date and vaccine name.");
+                    var mappedOrdersWithName = _mapper.Map<List<OrderDto>>(ordersWithName);
+                    return Ok(mappedOrdersWithName);
+                }
                 var orders = await _orderService.GetOrdersBeforeDate(date);
                 if (!orders.Any()) return NotFound("Could not find any orders before given date.");
 
