@@ -11,10 +11,11 @@ namespace VaccineApp.Shared.SeedDatabase
 {
     public class Seed
     {
+        private readonly char separator = Path.DirectorySeparatorChar;
         public List<Vaccination> SeedVaccinationData()
         {
             var vaccinations = new List<Vaccination>();
-            using (StreamReader r = new StreamReader(@"Data\Initial\vaccinations.json", Encoding.GetEncoding("iso-8859-1")))
+            using (StreamReader r = new StreamReader($"Data{separator}Initial{separator}vaccinations.json", Encoding.GetEncoding("iso-8859-1")))
             {
                 string json = r.ReadToEnd();
                 vaccinations = JsonConvert.DeserializeObject<List<Vaccination>>(json);
@@ -24,7 +25,7 @@ namespace VaccineApp.Shared.SeedDatabase
 
         public List<Order> SeedOrderData()
         {
-            string[] orderFiles = new string[] { "Data\\Initial\\zerpfy.json", "Data\\Initial\\solarBuddhica.json", "Data\\Initial\\antiqua.json" };
+            string[] orderFiles = new string[] { $"Data{separator}Initial{separator}zerpfy.json", $"Data{separator}Initial{separator}solarBuddhica.json", $"Data{separator}Initial{separator}antiqua.json" };
             var orders = new List<Order>();
             var temp = new List<Order>();
             foreach (var file in orderFiles)
